@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 @app.route('/create', methods=['GET'])
 def create_view():
+    import pdb; pdb.set_trace()
     return render_template('create.html')
 
 @app.route('/publish', methods=['POST'])
