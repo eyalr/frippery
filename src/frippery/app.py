@@ -15,14 +15,16 @@ from werkzeug import security
 
 import create
 
+import settings
+
 app = Flask(__name__)
 app.secret_key = 'development'
 oauth = OAuth(app)
 
 eventbriteapi = oauth.remote_app(
     'eventbrite',
-    consumer_key='Z5DXTVZGHJJV5GX5VJ',
-    consumer_secret='RHZHLC7BJTDB26IYBUEHZZ3EFAUAMY6UH33XVAPYPT7D5ANVHA',
+    consumer_key='JYUY5CEW6XFOIALPTA',
+    consumer_secret=settings.secret_key,
     request_token_params={
         'state': lambda: security.gen_salt(10)
     },
