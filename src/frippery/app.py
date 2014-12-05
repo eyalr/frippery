@@ -1,5 +1,4 @@
 import re
-import redis
 
 from flask import (
     Flask,
@@ -15,6 +14,7 @@ from flask_oauthlib.client import OAuth, OAuthException
 from werkzeug import security
 
 import create
+import storage
 
 import settings
 
@@ -67,6 +67,14 @@ def index():
     # this is where user lands to enter their form information
     return render_template('index.html')
 
+'''
+@app.route('/data')
+def test_data():
+    storage.add_event(123, 456, {'name': 'EVENT!', 'descr': 'DESCRIPERINO', 'type': 'secret-santa'})
+    storage.add_event(123, 457, {'name': 'EVENT DOS!', 'descr': 'OTHER ONE!', 'type': 'secret-santa'})
+    return str(storage.list_events(123))
+'''
+
 @app.route('/login')
 def login():
     return eventbriteapi.authorize(
@@ -94,8 +102,6 @@ def before_request():
         g.frippery_app = 'tourney'
     global eventbriteapi
     eventbriteapi = host_eb_apis[g.frippery_app]
-
-    g.redis = redis.Redis(**settings.REDIS_INIT)
 
 @app.route('/create', methods=['GET'])
 def create_view():

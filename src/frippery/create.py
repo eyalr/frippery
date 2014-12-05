@@ -36,3 +36,19 @@ created_event = eventbriteapi.post(
 )
 my_new_event_id = created_event['id']
 """
+
+""" jay: Ok, Once you've created an event you need to store it into redis
+do that with:
+
+    import storage
+    storage.add_event(
+        user_id,
+        event_id,
+        {
+            'name': 'testing',
+            'descr': 'test_description',
+            'type': 'secret-santa',
+        }
+    )
+
+"""
