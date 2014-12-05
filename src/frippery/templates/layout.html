@@ -1,20 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE html>
 <html lang="en">
-<html xmlns="http://www.w3.org/1999/xhtml">
 {% block head %}
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 <link rel=stylesheet type=text/css
     href="{{ url_for('static', filename=g.frippery_app + '.css') }}">
-<style type="text/css">
-.important { color: #336699; }
-</style>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='base.css') }}">
 <title>{% block title %}{% endblock %}</title>
 {% endblock %}
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div id="content">{% block content %}{% endblock %}</div>
+{% block content %}{% endblock %}
 </body>
 </html>

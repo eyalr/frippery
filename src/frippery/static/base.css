@@ -1,0 +1,17 @@
+#fr-logo {
+    height: 60px;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+}
+
+.fr-hero-container {
+    background-color: #EE5544;
+}
+
+.fr-lead {
+    margin: 30px auto 30px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #eeeeee;
+    text-align: center;
+}
