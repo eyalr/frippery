@@ -14,7 +14,8 @@ def create_new_event(form_values):
     elif len(organizer_ids) == 0:
         organizer = g.eb_api.post('organizers/', {
             'organizer.name': 'Organizer',
-            'organizer.description.html': '',
+            'organizer.description.html': 'org',
+            'organizer.logo.id': 1,
         })
         organizer_id = organizer.data['id']
 
