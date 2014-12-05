@@ -73,4 +73,8 @@ def authorize(eb_api):
     return None
 
 def is_logged_in():
-    return 'eventbrite_token' in session
+    if 'eventbrite_token' not in session or 'eventbrite_me' not in session:
+        return False
+
+    g.user_id = int(session['eventbrite_me']["id"])
+    return True

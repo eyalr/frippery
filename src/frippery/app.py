@@ -36,13 +36,13 @@ def index():
         return redirect('/events')
     return render_template('index.html')
 
-'''
-@app.route('/data')
+@app.route('/dummy_create')
 def test_data():
-    storage.add_event(123, 456, {'name': 'EVENT!', 'descr': 'DESCRIPERINO', 'type': 'secret-santa'})
-    storage.add_event(123, 457, {'name': 'EVENT DOS!', 'descr': 'OTHER ONE!', 'type': 'secret-santa'})
-    return str(storage.list_events(123))
-'''
+    if not auth.is_logged_in():
+        return redirect('/')
+    storage.add_event(g.user_id, 456, {'name': 'EVENT!', 'descr': 'DESCRIPERINO', 'type': 'secret-santa'})
+    storage.add_event(g.user_id, 457, {'name': 'EVENT DOS!', 'descr': 'OTHER ONE!', 'type': 'secret-santa'})
+    return str(storage.list_events(g.user_id))
 
 @app.route('/login')
 def login():
@@ -62,7 +62,7 @@ def authorize():
 def events():
     if not auth.is_logged_in():
         return redirect('/')
-    return "hello"
+    return render_template('events.html')
 
 @app.route('/create', methods=['GET'])
 def create_view():
