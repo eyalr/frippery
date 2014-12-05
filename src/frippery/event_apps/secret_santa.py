@@ -44,7 +44,7 @@ def notify(event_id):
                 'secret-santa-notify.eml',
                 gifter=gifter['first'],
                 event_name=event['name'],
-                giftee=giftee['first'],
+                giftee='%s %s' % (giftee['first'], giftee['last']),
             ),
         )
 
