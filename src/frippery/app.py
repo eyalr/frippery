@@ -141,6 +141,18 @@ def events():
     if not auth.is_logged_in():
         return redirect('/')
     events = storage.list_events(g.user_id)
+    imported_events = set(str(event[0]) for event in events)
+    non_imported_events = [
+        {
+            'id': event['id'],
+            'name': event['name']['text'],
+        }
+        for event in g.eb_api.get(
+            'users/me/owned_events',
+            {'status': 'live'},
+        ).data['events']
+        if event['id'] not in imported_events
+    ]
     from storage import (
         EVENT_STATUS_NEW,
         EVENT_STATUS_STARTED,
@@ -236,11 +248,11 @@ def connect_event():
     if not auth.is_logged_in():
         return redirect('/')
     input_data = request.values.to_dict()
-    event_id = input_data.get('eid') or '0'
-    if 'http' in event_id or 'eventbrite' in event_id:
-        event_id = re.search('/e/([0-9]+)', event_id).group(1)
-    event_id = int(event_id)
+    event_id = int(input_data['eid'])
     ticket_class = input_data.get('ticket_class')
+
+    if not event_id:
+        return redirect('/events')
 
     if ticket_class is None:
         ticket_classes = connect.connect_event(event_id)
@@ -253,11 +265,11 @@ def connect_event():
 
     if ticket_class:
         event_data = g.eb_api.get(
-            'events/%d' % (int(event_id),)
+            'events/%d' % (event_id,)
         ).data
         storage.add_event(
             g.user_id,
-            int(event_id),
+            event_id,
             {
                 'name': event_data['name']['text'],
                 'descr': event_data['description']['text'],

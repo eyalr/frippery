@@ -41,15 +41,42 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-4">
+        <div class="col-xs-4 hidden-xs">
             <a href="/create" class="btn btn-default">Create a {{ g.frippery_app }} event!</a>
         </div>
-        <div class="col-xs-2"></div>
-        <div class="col-xs-6">
-            <form class="form-inline pull-right" action="/connect" method="POST">
-                <input class="form-control" name="eid" type="text" placeholder="Existing event id."/>
-                <input class="btn btn-default" type="submit" value="Connect!" />
-            </form>
+        <div class="col-md-8 hidden-xs">
+            {% if non_imported_events %}
+                <form class="form-inline pull-right" action="/connect" method="POST">
+                    <select class="form-control" name="eid">
+                        <option value="0" selected>Pick an existing event to connect</option>
+                        {% for non_imported_event in non_imported_events %}
+                            <option value="{{ non_imported_event.id }}">{{ non_imported_event.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="btn btn-default form-control" type="submit" value="Connect!" />
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row visible-xs-block">
+        <div class="col-xs-12">
+            <a href="/create" class="form-control btn btn-default">Create a {{ g.frippery_app }} event!</a>
+        </div>
+    </div>
+    <br />
+    <div class="row visible-xs-block">
+        <div class="col-xs-12">
+            {% if non_imported_events %}
+                <form class="form-inline" action="/connect" method="POST">
+                    <select class="form-control" name="eid">
+                        <option value="0" selected>Pick an existing event to connect!</option>
+                        {% for non_imported_event in non_imported_events %}
+                            <option value="{{ non_imported_event.id }}">{{ non_imported_event.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="btn btn-default form-control" type="submit" value="Connect!" />
+                </form>
+            {% endif %}
         </div>
     </div>
 </div>
