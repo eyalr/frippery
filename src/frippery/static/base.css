@@ -45,3 +45,7 @@ body {
     top: 50%;
     transform: translateY(-50%);
 }
+
+.fr-tourney-reset {
+    margin: 30px auto 30px;
+}

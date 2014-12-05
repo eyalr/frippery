@@ -31,20 +31,21 @@
             {% else %}
             <div style="height: {{ (match[0][1] + match[1][1]) * 60 }}px">
                 <ul class="list-group fr-tourney-match">
-                    <li class="list-group-item">
-                {% if match[0][0] != None %}
-                    {{ players[match[0][0]][1] }}
-                {% else %}
-                    ?
-                {% endif %}
-                    </li>
-                    <li class="list-group-item">
-                {% if match[1][0] != None %}
-                    {{ players[match[1][0]][1] }}
-                {% else %}
-                    ?
-                {% endif %}
-                    </li>
+                {% for i in [0, 1] %}
+                    {% if match[i][0] != None %}
+                        {% if g.user_id %}
+                            <a href="/action/{{ event_id }}/set_result?player_1={{ match[0][0] }}&player_2={{ match[1][0] }}&&winner={{ match[i][0] }}" class="list-group-item">
+                                {{ players[match[i][0]][1] }}
+                            </a>
+                        {% else %}
+                            <li class="list-group-item">
+                                {{ players[match[i][0]][1] }}
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li class="list-group-item"> ? </li>
+                    {% endif %}
+                {% endfor %}
             </div>
             {% endif %}
         {% endif %}
@@ -54,8 +55,15 @@
     </div>
 </div>
 
-
-
+{% if g.user_id %}
+<div class="container-fluid">
+    <div class="text-center">
+        <a href="/action/{{ event_id }}/reset" class="fr-tourney-reset btn btn-default">
+            Reset Bracket
+        </a>
+    </div>
+</div>
+{% endif %}
 
 
 {% endblock %}

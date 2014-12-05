@@ -143,12 +143,35 @@ def view_event(event_id):
 
     if event_type == 'secret-santa':
         context = event_apps.secret_santa.get_context(event, event_view)
-        return render_template('secret-santa.html', **context)
+        return render_template('secret-santa.html', event_id=event_id, **context)
     elif event_type == 'tourney':
         context = event_apps.tourney.get_context(event, event_view)
-        return render_template('tourney.html', **context)
+        return render_template('tourney.html', event_id=event_id, **context)
     else:
         return "UNKNOWN EVENT TYPE"
+
+@app.route('/action/<int:event_id>/<string:method>')
+def action(event_id, method):
+    if not auth.is_logged_in():
+        return redirect('/')
+
+    event = storage.get_event(event_id)
+    event_type = event['type']
+
+    if event_type == 'secret-santa':
+        app = event_apps.secret_santa
+    elif event_type == 'tourney':
+        app = event_apps.tourney
+    else:
+        return "UNKNOWN EVENT TYPE"
+
+    method = getattr(app, method, None)
+    if method is None:
+        return "UNKNOWN METHOD"
+
+    method(event_id, **request.values.to_dict())
+    return redirect('/%s' % (event_id,))
+
 
 @app.route('/create', methods=['GET'])
 def create_view():

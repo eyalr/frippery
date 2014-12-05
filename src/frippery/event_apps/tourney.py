@@ -1,6 +1,8 @@
 import math
 import random
 
+import storage
+
 def create_event_view(event, attendees):
     random.shuffle(attendees)
     return [attendees, {}]
@@ -51,3 +53,20 @@ def get_context(event, event_view):
     count = len
 
     return locals()
+
+def set_result(event_id, player_1='None', player_2='None', winner='None'):
+    if player_1 == 'None' or player_2 == 'None':
+        return
+
+    event_view = storage.load_event_view(event_id)
+    event_view[1][
+        '%s:%s' % tuple(sorted([int(player_1), int(player_2)]))
+    ] = int(winner)
+
+    storage.save_event_view(event_id, event_view)
+
+def reset(event_id):
+    event_view = storage.load_event_view(event_id)
+    event_view[1] = {}
+
+    storage.save_event_view(event_id, event_view)
