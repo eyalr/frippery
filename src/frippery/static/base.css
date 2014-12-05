@@ -6,12 +6,16 @@
 
 .fr-hero-container {
     background-color: #EE5544;
+    text-align: center;
 }
 
 .fr-lead {
     margin: 30px auto 30px;
-    font-size: 24px;
+    font-size: 40px;
     font-weight: 600;
-    color: #eeeeee;
-    text-align: center;
+    color: #ffffff;
+}
+
+.fr-index-login-button {
+    margin: 30px auto 30px;
 }
