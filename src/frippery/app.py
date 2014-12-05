@@ -14,6 +14,7 @@ from flask_oauthlib.client import OAuthException
 
 import auth
 import create
+import event_apps
 import storage
 
 import settings
@@ -25,10 +26,8 @@ eventbite_apis = auth.initialize(app)
 def before_request():
     if 'secret-santa' in request.host.lower():
         g.frippery_app = 'secret-santa'
-        g.frippery_app_pretty = 'secret santa'
     else:
         g.frippery_app = 'tourney'
-        g.frippery_app_pretty = 'tournament'
     g.eb_api = eventbite_apis[g.frippery_app]
 
 
@@ -43,7 +42,31 @@ def test_data():
     if not auth.is_logged_in():
         return redirect('/')
     storage.add_event(g.user_id, 456, {'name': 'EVENT!', 'descr': 'DESCRIPERINO', 'type': 'secret-santa'})
-    storage.add_event(g.user_id, 457, {'name': 'EVENT DOS!', 'descr': 'OTHER ONE!', 'type': 'secret-santa'})
+    storage.start_event(g.user_id, 456)
+    storage.save_event_view(456, [
+        {
+            'first': 'Jay',
+            'last': 'Chan',
+            'email': 'jay@evbqa.com',
+        },
+        {
+            'first': 'Eyal',
+            'last': 'Reuveni',
+            'email': 'eyal@evbqa.com',
+        },
+        {
+            'first': 'Mica',
+            'last': 'Swyers',
+            'email': 'mica@evbqa.com',
+        },
+        {
+            'first': 'Nicole',
+            'last': 'Zuckercorn',
+            'email': 'nicolez@evbqa.com',
+        },
+
+    ])
+    storage.add_event(g.user_id, 457, {'name': 'EVENT DOS!', 'descr': 'OTHER ONE!', 'type': 'tourney'})
     return str(storage.list_events(g.user_id))
 
 @app.route('/login')
@@ -70,6 +93,26 @@ def events():
         EVENT_STATUS_STARTED,
     )
     return render_template('events.html', **locals())
+
+@app.route('/<int:event_id>')
+def view_event(event_id):
+    # don't have to be logged in, but still get logged in status
+    auth.is_logged_in()
+
+    event = storage.get_event(event_id)
+    event_view = storage.load_event_view(event_id)
+    event_type = event['type']
+
+    g.frippery_app = event_type
+
+    if event_type == 'secret-santa':
+        context = event_apps.secret_santa.get_context(event, event_view)
+        return render_template('secret-santa.html', **context)
+    elif event_type == 'tourney':
+        context = event_apps.tourney.get_context(event, event_view)
+        return render_template('tourney.html', **context)
+    else:
+        return "UNKNOWN EVENT TYPE"
 
 @app.route('/create', methods=['GET'])
 def create_view():
