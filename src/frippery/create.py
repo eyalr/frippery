@@ -1,10 +1,11 @@
 import datetime
 import json
+import storage
 from flask import g
 
 
 def create_new_event(form_values):
-    # user_id = g.user_id
+    user_id = g.user_id
     organizer_api_data = g.eb_api.get('/v3/users/me/organizers')
     organizer_ids = organizer_api_data.data['organizers']
     if len(organizer_ids) >= 1:
@@ -37,21 +38,16 @@ def create_new_event(form_values):
         'ticket_class.free': 'on',
     }
     ticket_info = g.eb_api.post(ticket_post_path, ticket_post_information)
+    ticket_class_id = ticket_info.data['id']
     path_to_publish = "/v3/events/" + event_id + "/publish/"
     response_from_api = g.eb_api.post(path_to_publish, {})
-
-""" jay: Ok, Once you've created an event you need to store it into redis
-do that with:
-
-    import storage
     storage.add_event(
         user_id,
         event_id,
         {
-            'name': 'testing',
-            'descr': 'test_description',
-            'type': 'secret-santa',
+            'name': form_values['event_name'],
+            'descr': form_values['event_description'],
+            'type': g.frippery_app,
+            'ticket_class': ticket_class_id,
         }
     )
-
-"""
