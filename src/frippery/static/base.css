@@ -34,3 +34,14 @@ body {
 .fr-index-login-button {
     margin: 30px auto 30px;
 }
+
+.fr-tourney-bye {
+    width: 1px;
+}
+
+.fr-tourney-match {
+    margin: 0px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}

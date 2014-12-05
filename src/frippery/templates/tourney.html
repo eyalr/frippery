@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}Bracket{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h2> {{ event.name }} </h2>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+{% for column in columns %}
+        <div class="col-xs-{{ span }} text-center">
+    {% for match in column %}
+        {% if match[0][0] == '' %}
+            <div class="fr-tourney-bye" style="height: 60px"> </div>
+        {% else %}
+            {% if count(match) == 1 %}
+            <div style="height: {{ match[0][1] * 60 }}px">
+                <ul class="list-group fr-tourney-match">
+                    <li class="list-group-item">
+                {% if match[0][0] != None %}
+                    {{ players[match[0][0]][1] }}
+                {% else %}
+                    ?
+                {% endif %}
+                    </li>
+                </ul>
+            </div>
+            {% else %}
+            <div style="height: {{ (match[0][1] + match[1][1]) * 60 }}px">
+                <ul class="list-group fr-tourney-match">
+                    <li class="list-group-item">
+                {% if match[0][0] != None %}
+                    {{ players[match[0][0]][1] }}
+                {% else %}
+                    ?
+                {% endif %}
+                    </li>
+                    <li class="list-group-item">
+                {% if match[1][0] != None %}
+                    {{ players[match[1][0]][1] }}
+                {% else %}
+                    ?
+                {% endif %}
+                    </li>
+            </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+        </div>
+{% endfor  %}
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

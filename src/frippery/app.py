@@ -67,6 +67,42 @@ def test_data():
 
     ])
     storage.add_event(g.user_id, 457, {'name': 'EVENT DOS!', 'descr': 'OTHER ONE!', 'type': 'tourney'})
+
+    storage.add_event(g.user_id, 458, {'name': 'NUMERO 3', 'descr': 'ANOTHER!', 'type': 'tourney'})
+    storage.start_event(g.user_id, 458)
+    storage.save_event_view(458, [[
+        {
+            'first': 'Jay',
+            'last': 'Chan',
+            'email': 'jay@evbqa.com',
+        },
+        {
+            'first': 'Eyal',
+            'last': 'Reuveni',
+            'email': 'eyal@evbqa.com',
+        },
+        {
+            'first': 'Mica',
+            'last': 'Swyers',
+            'email': 'mica@evbqa.com',
+        },
+        {
+            'first': 'Nicole',
+            'last': 'Zuckercorn',
+            'email': 'nicolez@evbqa.com',
+        },
+        {
+            'first': 'Kevin',
+            'last': 'Hartz',
+            'email': 'kevin@dummy.com',
+        },
+        {
+            'first': 'Julia',
+            'last': 'Hartz',
+            'email': 'julia@dummy.com',
+        },
+
+    ], {'1:2': 2, '4:5': 5, '0:2':2, '3:5':3, '2:3': 3}])
     return str(storage.list_events(g.user_id))
 
 @app.route('/login')
