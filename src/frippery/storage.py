@@ -37,6 +37,8 @@ def add_event(user_id, event_id, data):
         event_id,
         EVENT_STATUS_NEW,
     )
+    data['user_id'] = user_id
+    data['event_id'] = event_id
     redis_client.hmset(
         _event_key(event_id),
         data,

@@ -139,6 +139,10 @@ def view_event(event_id):
     event_view = storage.load_event_view(event_id)
     event_type = event['type']
 
+    # pretend user isn't logged in
+    if hasattr(g, 'userid') and event['user_id'] != g.user_id:
+        delattr(g, 'user_id')
+
     g.frippery_app = event_type
 
     if event_type == 'secret-santa':
@@ -157,6 +161,9 @@ def action(event_id, method):
 
     event = storage.get_event(event_id)
     event_type = event['type']
+
+    if hasattr(g, 'userid') and event['user_id'] != g.user_id:
+        return "NOT YOUR EVENT"
 
     if event_type == 'secret-santa':
         app = event_apps.secret_santa
