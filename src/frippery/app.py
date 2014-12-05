@@ -96,10 +96,6 @@ def before_request():
 
 @app.route('/create', methods=['GET'])
 def create_view():
-    if 'eventbrite_token' in session:
-        me = eventbriteapi.get('users/me')
-        import ipdb; ipdb.set_trace()
-        return jsonify(me.data)
     return render_template('create.html')
 
 @app.route('/publish', methods=['POST'])
