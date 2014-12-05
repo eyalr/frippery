@@ -4,6 +4,37 @@
 
 {% block content %}
 
-Events
+<div class="container-fluid">
+    <h2> Events </h2>
+</div>
+
+{% for event_id, status, details in events %}
+
+<div class="container-fluid">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-8">
+                    <strong>{{ details.name }}</strong>
+                </div>
+    {% if status == EVENT_STATUS_NEW %}
+                <div class="col-xs-2">
+                    <a class="btn btn-default pull-right">Register</a>
+                </div>
+                <div class="col-xs-2">
+                    <a class="btn btn-default pull-right">Start!</a>
+                </div>
+    {% elif status == EVENT_STATUS_STARTED %}
+                <div class="col-xs-4">
+                    <a class="btn btn-default pull-right">View</a>
+                </div>
+    {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
 
 {% endblock %}

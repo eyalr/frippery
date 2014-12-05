@@ -62,7 +62,12 @@ def authorize():
 def events():
     if not auth.is_logged_in():
         return redirect('/')
-    return render_template('events.html')
+    events = storage.list_events(g.user_id)
+    from storage import (
+        EVENT_STATUS_NEW,
+        EVENT_STATUS_STARTED,
+    )
+    return render_template('events.html', **locals())
 
 @app.route('/create', methods=['GET'])
 def create_view():

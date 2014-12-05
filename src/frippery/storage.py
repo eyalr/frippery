@@ -52,7 +52,7 @@ def list_events(user_id):
         ).iteritems()
     ]
     result.sort()
-    return str(result)
+    return result
 
 def start_event(user_id, event_id):
     redis_client = _get_redis_client()
