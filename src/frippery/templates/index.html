@@ -1,22 +1,9 @@
-<!doctype html>
-<head>
-</head>
-<body>
-    Hello, World!
-<form action="/create">
-    Enter your event name:<br>
-    <input type="text" name="event_name"><br>
-    Event description:<br>
-    <input type="text" name="event_description"><br>
-    <input type="hidden" name="organizer_id">
-    Event start date:<br>
-    <input type="text" name="event_start"><br>
-    <input type="text" name="event_start_timezone">
-    Event end date:<br>
-    <input type="text" name="event_end"><br>
-    <input type="text" name="event_end_timezone">
-    <input type="hidden" name="event_currency" value="USD">
-    <input type="submit" value="Submit">
-</form>
+{% extends "layout.html" %}
 
-</body>
+{% block title %}Frippery{% endblock %}
+
+{% block content %}
+
+HELLO WORLD!
+
+{% endblock %}

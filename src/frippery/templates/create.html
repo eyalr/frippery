@@ -1,8 +1,8 @@
-<!doctype html>
-<head>
-</head>
-<body>
-    Hello, World!
+{% extends "layout.html" %}
+
+{% block title %}Create - Frippery{% endblock %}
+
+{% block content %}
 <form action="/publish" method="POST">
     Enter your event name:<br>
     <input type="text" name="event_name"><br>
@@ -20,5 +20,4 @@
     <input type="hidden" name="event_currency" value="USD"><br>
     <input type="submit" value="Save and publish">
 </form>
-
-</body>
+{% endblock %}
