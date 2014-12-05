@@ -16,6 +16,7 @@ import auth
 import connect
 import create
 import event_apps
+import mail
 import storage
 
 import settings
@@ -38,13 +39,27 @@ def index():
         return redirect('/events')
     return render_template('index.html')
 
+@app.route('/dummy_mail')
+def dummy_mail():
+    mail.send_email(
+        'jay@evbqa.com',
+        'HELLLLOOOO',
+        render_template(
+            'secret-santa-notify.eml',
+            gifter="Jay",
+            event_name="Bob's Secret Santa",
+            giftee="Eyal",
+            ),
+    )
+    return 'ok'
+
 @app.route('/dummy_create')
 def test_data():
     if not auth.is_logged_in():
         return redirect('/')
     storage.add_event(g.user_id, 456, {'name': 'EVENT!', 'descr': 'DESCRIPERINO', 'type': 'secret-santa'})
     storage.start_event(g.user_id, 456)
-    storage.save_event_view(456, [
+    storage.save_event_view(456, [[
         {
             'first': 'Jay',
             'last': 'Chan',
@@ -66,7 +81,7 @@ def test_data():
             'email': 'nicolez@evbqa.com',
         },
 
-    ])
+    ], {'notified': False}])
     storage.add_event(g.user_id, 457, {'name': 'EVENT DOS!', 'descr': 'OTHER ONE!', 'type': 'tourney'})
 
     storage.add_event(g.user_id, 458, {'name': 'NUMERO 3', 'descr': 'ANOTHER!', 'type': 'tourney'})
