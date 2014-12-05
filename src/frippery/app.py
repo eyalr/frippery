@@ -24,42 +24,42 @@ oauth = OAuth(app)
 class _NOT_DEFINED(object):
     pass
 
-eventbriteapi = _NOT_DEFINED
+eventbriteapi = None
 
-app_config = {
-    'tourney': {
-        'consumer_key': 'JYUY5CEW6XFOIALPTA',
-        'consumer_secret': settings.tourney_secret_key,
-    },
-    'secret-santa': {
-        'consumer_key': 'Z5HCI737VIWT2DRTAK',
-        'consumer_secret': settings.secret_santa_secret_key,
-    },
+host_eb_apis = {
+    'tourney': oauth.remote_app(
+        'eventbrite-tourney',
+        consumer_key='JYUY5CEW6XFOIALPTA',
+        consumer_secret=settings.tourney_secret_key,
+        request_token_params={
+            'state': lambda: security.gen_salt(10)
+        },
+        base_url='https://www.eventbriteapi.com/v3/',
+        request_token_url=None,
+        access_token_method='POST',
+        access_token_url='https://www.eventbrite.com/oauth/token',
+        authorize_url='https://www.eventbrite.com/oauth/authorize',
+    ),
+    'secret-santa': oauth.remote_app(
+        'eventbrite-ss',
+        consumer_key='Z5HCI737VIWT2DRTAK',
+        consumer_secret=settings.secret_santa_secret_key,
+        request_token_params={
+            'state': lambda: security.gen_salt(10)
+        },
+        base_url='https://www.eventbriteapi.com/v3/',
+        request_token_url=None,
+        access_token_method='POST',
+        access_token_url='https://www.eventbrite.com/oauth/token',
+        authorize_url='https://www.eventbrite.com/oauth/authorize',
+    ),
 }
-
-
-def _init_eventbriteapi():
-    global eventbriteapi
-    if eventbriteapi is _NOT_DEFINED:
-        eventbriteapi = oauth.remote_app(
-            'eventbrite',
-            consumer_key=app_config[g.frippery_app]['consumer_key'],
-            consumer_secret=app_config[g.frippery_app]['consumer_secret'],
-            request_token_params={
-                'state': lambda: security.gen_salt(10)
-            },
-            base_url='https://www.eventbriteapi.com/v3/',
-            request_token_url=None,
-            access_token_method='POST',
-            access_token_url='https://www.eventbrite.com/oauth/token',
-            authorize_url='https://www.eventbrite.com/oauth/authorize'
-        )
-        eventbriteapi.tokengetter(lambda *args: session.get('eventbrite_token'))
+for _api in host_eb_apis.values():
+    _api.tokengetter(lambda *args: session.get('eventbrite_token'))
 
 
 @app.route('/', methods=['GET'])
 def index():
-    _init_eventbriteapi()
     if 'eventbrite_token' in session:
         me = eventbriteapi.get('users/me')
         return jsonify(me.data)
@@ -68,14 +68,12 @@ def index():
 
 @app.route('/login')
 def login():
-    _init_eventbriteapi()
     return eventbriteapi.authorize(
         callback=url_for('authorized', _external=True),
     )
 
 @app.route('/events')
 def authorized():
-    _init_eventbriteapi()
     resp = eventbriteapi.authorized_response()
     if resp is None or isinstance(resp, OAuthException):
         return 'Access denied: reason=%s error=%s' % (
@@ -93,6 +91,8 @@ def before_request():
         g.frippery_app = 'secret-santa'
     else:
         g.frippery_app = 'tourney'
+    global eventbriteapi
+    eventbriteapi = host_eb_apis[g.frippery_app]
 
 @app.route('/create', methods=['GET'])
 def create_view():
