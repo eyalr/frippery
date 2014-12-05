@@ -5,8 +5,14 @@ from flask import g
 
 def create_new_event(form_values):
     # user_id = g.user_id
-    # import pdb; pdb.set_trace()
-    organizer_id = g.eb_api.get('/v3/users/me/organizers')
+    organizer_api_data = g.eb_api.get('/v3/users/me/organizers')
+    organizer_ids = organizer_api_data.data['organizers']
+    if len(organizer_ids) >= 1:
+        organizer_id = organizer_ids[0]['id']
+    elif len(organizer_ids) == 0:
+        organizer = g.eb_api.post('organizers/', {'organizer.name':'Organizer'})
+        organizer_id = organizer.data['id']
+
     start_date = form_values['event_start_date'] + "T" + form_values['event_start_time'] + "Z"
     end_date = form_values['event_end_date'] + "T" + form_values['event_end_time'] + "Z"
     create_data = {
@@ -22,39 +28,17 @@ def create_new_event(form_values):
     }
 
     response_from_api = g.eb_api.post("events/", create_data)
-    event_id = response_from_api.eid
-    ticket_post_path = 'v3/events/' + event_id + "/ticket_classes"
+
+    event_id = response_from_api.data['id']
+    ticket_post_path = '/v3/events/' + event_id + "/ticket_classes/"
     ticket_post_information = {
-        ticket_class.name: g.frippery_app,
-        ticket_class.quantity_total: "",
-        ticket_class.free: True,
+        'ticket_class.name': g.frippery_app,
+        'ticket_class.quantity_total': form_values['ticket_quantity'],
+        'ticket_class.free': 'on',
     }
-    g.eb_api.post(ticket_post_path,)
-    response_from_api = external_requests.post("https://www.eventbrite.com/xml/events/publish/", event_id)
-
-# start/end timezones
-# ^^^ this is in "Olson Format": http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-# ^^^ 3rd column from left
-# user id/authorization of some sort
-# ^^^ use eventbriteapi that gets passed in - eyal
-
-""" eyal: I succesfully created an event like so...
-created_event = eventbriteapi.post(
-    'events/',
-    {
-        'event.name.html': 'testing',
-        'event.currency': 'USD',
-        'event.description.html': 'test_description',
-        'event.start.utc': '2014-12-18T16:00:00Z',
-        'event.start.timezone': 'America/Los_Angeles',
-        'event.end.utc': '2014-12-18T23:00:00Z',
-        'event.end.timezone': 'America/Los_Angeles',
-        'event.organizer_id': '7803975089',
-        'event.online_event': True,
-    },
-)
-my_new_event_id = created_event['id']
-"""
+    ticket_info = g.eb_api.post(ticket_post_path, ticket_post_information)
+    path_to_publish = "/v3/events/" + event_id + "/publish/"
+    response_from_api = g.eb_api.post(path_to_publish, {})
 
 """ jay: Ok, Once you've created an event you need to store it into redis
 do that with:
