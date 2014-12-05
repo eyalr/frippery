@@ -78,3 +78,11 @@ def is_logged_in():
 
     g.user_id = int(session['eventbrite_me']["id"])
     return True
+
+def logout():
+    if 'eventbrite_token' in session:
+        del session['eventbrite_token']
+
+    if 'eventbrite_me' in session:
+        del session['eventbrite_me']
+
