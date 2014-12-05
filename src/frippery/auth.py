@@ -16,7 +16,7 @@ def initialize(app):
     host_eb_apis = {
         'tourney': oauth.remote_app(
             'eventbrite-tourney',
-            consumer_key='JYUY5CEW6XFOIALPTA',
+            consumer_key=settings.tourney_consumer_key,
             consumer_secret=settings.tourney_secret_key,
             request_token_params={
                 'state': lambda: security.gen_salt(10)
@@ -29,7 +29,7 @@ def initialize(app):
         ),
         'secret-santa': oauth.remote_app(
             'eventbrite-ss',
-            consumer_key='Z5HCI737VIWT2DRTAK',
+            consumer_key=settings.secret_santa_consumer_key,
             consumer_secret=settings.secret_santa_secret_key,
             request_token_params={
                 'state': lambda: security.gen_salt(10)
