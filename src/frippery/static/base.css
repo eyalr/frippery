@@ -1,3 +1,14 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
 #fr-logo {
     height: 60px;
     background-repeat: no-repeat;
@@ -9,7 +20,7 @@
 }
 
 .fr-hero-container {
-    background-color: #EE5544;
+    margin-top: 10px;
     text-align: center;
 }
 

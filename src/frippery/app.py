@@ -25,8 +25,10 @@ eventbite_apis = auth.initialize(app)
 def before_request():
     if 'secret-santa' in request.host.lower():
         g.frippery_app = 'secret-santa'
+        g.frippery_app_pretty = 'secret santa'
     else:
         g.frippery_app = 'tourney'
+        g.frippery_app_pretty = 'tournament'
     g.eb_api = eventbite_apis[g.frippery_app]
 
 

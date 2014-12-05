@@ -1,3 +1,11 @@
+body {
+    background: linear-gradient(#eeeeee, #8888cc);
+}
+
+.fr-hero-container {
+    background-color: #EE9944;
+}
+
 #fr-logo {
     background: url('/static/tourney-logo.png');
 }
