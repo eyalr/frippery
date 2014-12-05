@@ -211,12 +211,24 @@ def submit_new_event():
     return redirect('/events')
 
 @app.route('/start/<int:event_id>', methods=['GET'])
-def start(event_id):
+def start_event(event_id):
     if not auth.is_logged_in():
         return redirect('/')
     storage.start_event(g.user_id, event_id)
-    attendees = start.finalize_attendees(event_id)
-    storage.save_event_view(event_id, [[
+
+    event_data = storage.get_event(event_id)
+    event_type = event_data['type']
+    if event_type == 'secret-santa':
+        app = event_apps.secret_santa
+    elif event_type == 'tourney':
+        app = event_apps.tourney
+    ticket_class_id = event_data['ticket_class']
+
+    attendees = start.finalize_attendees(event_id, ticket_class_id)
+    storage.save_event_view(
+        event_id,
+        app.create_event_view(event_data, attendees),
+    )
     return redirect('/%d' % (event_id,))
 
 @app.route('/connect', methods=['GET', 'POST'])
