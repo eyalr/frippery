@@ -18,7 +18,7 @@
                     <strong>{{ details.name }}</strong>
                 </div>
                 <div class="col-xs-2">
-                    Type: {{ details.type.replace('-', ' ').capitalize() }}
+                    <div class="hidden-xs">{{ details.type.replace('-', ' ').capitalize() }}</div>
                 </div>
     {% if status == EVENT_STATUS_NEW %}
                 <div class="col-xs-2">
