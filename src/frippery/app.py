@@ -38,7 +38,7 @@ def before_request():
 def index():
     if auth.is_logged_in():
         return redirect('/events')
-    return render_template('index.html')
+    return render_template('index.html', app=g.frippery_app)
 
 @app.route('/dummy_mail')
 def dummy_mail():
