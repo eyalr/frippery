@@ -22,10 +22,10 @@
                 </div>
     {% if status == EVENT_STATUS_NEW %}
                 <div class="col-xs-2">
-                    <a class="btn btn-default pull-right">Register</a>
+                    <a class="btn btn-default pull-right" href="http://www.eventbrite.com/e/{{ event_id }}" target="_blank">Register</a>
                 </div>
                 <div class="col-xs-2">
-                    <a class="btn btn-default pull-right">Start!</a>
+                    <a class="btn btn-default pull-right" href="/start/{{ event_id }}">Start!</a>
                 </div>
     {% elif status == EVENT_STATUS_STARTED %}
                 <div class="col-xs-4">

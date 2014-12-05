@@ -17,6 +17,7 @@ import connect
 import create
 import event_apps
 import mail
+import start
 import storage
 
 import settings
@@ -209,12 +210,24 @@ def submit_new_event():
     create.create_new_event(request.values.to_dict())
     return redirect('/events')
 
+@app.route('/start/<int:event_id>', methods=['GET'])
+def start(event_id):
+    if not auth.is_logged_in():
+        return redirect('/')
+    storage.start_event(g.user_id, event_id)
+    attendees = start.finalize_attendees(event_id)
+    storage.save_event_view(event_id, [[
+    return redirect('/%d' % (event_id,))
+
 @app.route('/connect', methods=['GET', 'POST'])
 def connect_event():
     if not auth.is_logged_in():
         return redirect('/')
     input_data = request.values.to_dict()
-    event_id = input_data.get('eid')
+    event_id = input_data.get('eid') or '0'
+    if 'http' in event_id or 'eventbrite' in event_id:
+        event_id = re.search('/e/([0-9]+)', event_id).group(1)
+    event_id = int(event_id)
     ticket_class = input_data.get('ticket_class')
 
     if ticket_class is None:
