@@ -2,23 +2,48 @@
 
 {% block title %}Create - Frippery{% endblock %}
 
+
 {% block content %}
-<form action="/publish" method="POST">
-    Enter your event name:<br>
-    <input type="text" name="event_name"><br>
-    Event description:<br>
-    <input type="text" name="event_description"><br>
-    <input type="hidden" name="organizer_id"><br>
-    Event start date (ex. 2014-12-25):<br>
-    <input type="text" name="event_start_date"><br>
-    Event start time (ex. 12:05:59): <br>
-    <input type="text" name="event_start_time"><br>
-    Event end date (ex. 2014-12-25):<br>
-    <input type="text" name="event_end_date"><br>
-    Event end time (ex. 12:05:59): <br>
-    <input type="text" name="event_end_time"><br>
-    Ticket Quantity: <br>
-    <input type="text" name="ticket_quantity"><br>
-    <input type="submit" value="Save and publish">
-</form>
+<div class="container-fluid">
+    <h2>Create an Event</h2>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <form action="/publish" method="POST">
+                <div class="form-group">
+                    <label>Enter your event name</label>
+                    <input class="form-control" type="text" name="event_name">
+                </div>
+                <div class="form-group">
+                    <label>Event description</label>
+                    <input class="form-control" type="text" name="event_description">
+                </div>
+                <div class="form-group">
+                    <label>Event start date (ex. 2014-12-25)</label>
+                    <input class="form-control" type="text" name="event_start_date">
+                </div>
+                <div class="form-group">
+                    <label>Event start time (ex. 12:05:59)</label>
+                    <input class="form-control" type="text" name="event_start_time">
+                </div>
+                <div class="form-group">
+                    <label>Event end date (ex. 2014-12-25)</label>
+                    <input class="form-control" type="text" name="event_end_date">
+                </div>
+                <div class="form-group">
+                    <label>Event end time (ex. 12:05:59)</label>
+                    <input class="form-control" type="text" name="event_end_time">
+                </div>
+                <div class="form-group">
+                    <label>Ticket Quantity</label>
+                    <input class="form-control" type="text" name="ticket_quantity">
+                </div>
+                <input class="btn btn-default btn-lg" type="submit" value="Save and Publish">
+                <input type="hidden" name="organizer_id">
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
