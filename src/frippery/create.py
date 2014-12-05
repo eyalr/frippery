@@ -1,6 +1,7 @@
 import datetime
 import json
 import storage
+import string
 from flask import g
 
 
@@ -33,7 +34,7 @@ def create_new_event(form_values):
     event_id = response_from_api.data['id']
     ticket_post_path = '/v3/events/' + event_id + "/ticket_classes/"
     ticket_post_information = {
-        'ticket_class.name': g.frippery_app,
+        'ticket_class.name': '%s participant' % (string.capwords(g.frippery_app.replace('-', ' ')),),
         'ticket_class.quantity_total': form_values['ticket_quantity'],
         'ticket_class.free': 'on',
     }
