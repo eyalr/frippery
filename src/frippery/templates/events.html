@@ -14,8 +14,11 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-8">
+                <div class="col-xs-6">
                     <strong>{{ details.name }}</strong>
+                </div>
+                <div class="col-xs-2">
+                    Type: {{ details.type.replace('-', ' ').capitalize() }}
                 </div>
     {% if status == EVENT_STATUS_NEW %}
                 <div class="col-xs-2">
