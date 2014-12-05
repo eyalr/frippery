@@ -13,6 +13,7 @@ from flask import (
 from flask_oauthlib.client import OAuthException
 
 import auth
+import connect
 import create
 import event_apps
 import storage
@@ -192,6 +193,47 @@ def submit_new_event():
         return redirect('/')
     create.create_new_event(request.values.to_dict())
     return redirect('/events')
+
+@app.route('/connect', methods=['GET', 'POST'])
+def connect_event():
+    if not auth.is_logged_in():
+        return redirect('/')
+    input_data = request.values.to_dict()
+    event_id = input_data.get('eid')
+    ticket_class = input_data.get('ticket_class')
+
+    if ticket_class is None:
+        ticket_classes = connect.connect_event(event_id)
+    else:
+        ticket_classes = {}
+
+    # If only one ticket class, no need to prompt them to select one.
+    if len(ticket_classes) == 1:
+        ticket_class = ticket_classes.keys()[0]
+
+    if ticket_class:
+        event_data = g.eb_api.get(
+            'events/%d' % (int(event_id),)
+        ).data
+        storage.add_event(
+            g.user_id,
+            int(event_id),
+            {
+                'name': event_data['name']['text'],
+                'descr': event_data['description']['text'],
+                'type': g.frippery_app,
+                'ticket_class': int(ticket_class),
+            },
+        )
+
+    if ticket_class is None:
+        return render_template(
+            'connect.html',
+            ticket_classes=ticket_classes,
+            event_id=event_id,
+        )
+    else:
+        return redirect('/events')
 
 @app.route('/logout')
 def logout():

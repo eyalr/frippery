@@ -29,6 +29,7 @@ def add_event(user_id, event_id, data):
         data = {
             'name': 'EVENT NAME',
             'descr': 'EVENT DESCR',
+            'ticket_class': TICKET_CLASS_ID,
         }
     """
     redis_client = _get_redis_client()

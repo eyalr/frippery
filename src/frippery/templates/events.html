@@ -36,5 +36,12 @@
 
 {% endfor %}
 
+<div class="row">
+    <form action="/connect" method="POST">
+    <div class="col-xs-2"></div>
+    <div class="col-xs-2"><a href="/create">Create an {{ app_name}} event!</a></div>
+    <div class="col-xs-8">Add in an existing event id: <input name="eid" type="text" /><input type="submit" value="Connect!" /></div>
+</div>
+
 
 {% endblock %}

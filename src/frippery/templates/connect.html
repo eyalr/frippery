@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}Connect Your Event{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h2> Connect Your Event </h2>
+    <h3> Which ticket should we use? </h3>
+</div>
+
+{% for ticket_class, ticket_data in ticket_classes.iteritems() %}
+
+<div class="container-fluid">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <a href="/connect?eid={{ event_id }}&ticket_class={{ ticket_class }}">
+                    <div class="col-xs-12">
+                        <strong>"{{ ticket_data.name }}" which sold {{ ticket_data.quantity_sold}} tickets</strong>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
