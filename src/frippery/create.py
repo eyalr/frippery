@@ -12,7 +12,10 @@ def create_new_event(form_values):
     if len(organizer_ids) >= 1:
         organizer_id = organizer_ids[0]['id']
     elif len(organizer_ids) == 0:
-        organizer = g.eb_api.post('organizers/', {'organizer.name':'Organizer'})
+        organizer = g.eb_api.post('organizers/', {
+            'organizer.name': 'Organizer',
+            'organizer.description.html': '',
+        })
         organizer_id = organizer.data['id']
 
     start_date = form_values['event_start_date'] + "T" + form_values['event_start_time'] + "Z"
