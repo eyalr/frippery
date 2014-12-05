@@ -1,2 +1,2 @@
 *.pyc
-*/settings/overrides.py
+src/frippery/settings/overrides.py
