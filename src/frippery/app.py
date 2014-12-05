@@ -1,4 +1,5 @@
 import re
+import redis
 
 from flask import (
     Flask,
@@ -93,6 +94,8 @@ def before_request():
         g.frippery_app = 'tourney'
     global eventbriteapi
     eventbriteapi = host_eb_apis[g.frippery_app]
+
+    g.redis = redis.Redis(**settings.REDIS_INIT)
 
 @app.route('/create', methods=['GET'])
 def create_view():
